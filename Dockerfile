@@ -10,7 +10,10 @@ RUN apt-get update && apt-get -y install pip
 
 RUN pip install Pillow tifffile imagecodecs
 
-COPY src/ /pile
-ENV PYTHONPATH=
+COPY src/ /pile/
+RUN ln -s /pile/pile3.py /usr/local/bin
 
+ENV PYTHONPATH=/pile
+# CMD ["pile3.py", "--help"]
+# CMD ["python3","-m pile3", "--help"]
 CMD ["python3","/pile/pile3.py", "--help"]
