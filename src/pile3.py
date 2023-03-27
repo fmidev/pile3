@@ -36,10 +36,10 @@ parser.add_argument("-o", "--output_filename",
 #                  default="test.jpg",
 
 parser.add_argument("-I", "--interpolation", 
-    dest="INTERPOLATION",
-    default=Image.ANTIALIAS,
-    help="Interpolation method, 1=bilinear etc, see PIL manual. ", 
-    metavar="<index>")
+                    dest="INTERPOLATION",
+                    default=Image.LANCZOS, #ANTIALIAS,
+                    help="Interpolation method, 1=bilinear etc, see PILLOW manual. ", 
+                    metavar="<index>")
 
 parser.add_argument("-Q", "--quad", 
     dest="QUAD",
@@ -116,7 +116,7 @@ parser.add_argument("-C", "--compare",
     type=str,
     dest="COMPARE", 
     default="", 
-    metavar="<report-format>",
+    metavar="[SIZE|TYPE|0...1.0|WARN|ERROR]",
     help="Compare two images")
 
 
@@ -188,24 +188,33 @@ if __name__ == '__main__':
         if (image_count != 2):
             logger.error('Comparing applicable for 2 images, but loaded %d', image_count)
             exit(1)
+        compare = options.COMPARE.split(',')
         data1 = np.array(Im[0])
         #logger.info(data1)
         data2 = np.array(Im[1])
         #logger.info(data2)
-        if (data1.dtype != data2.dtype):
-            logger.error('Mode: %s != %s', data1.dtype, data2.dtype)
-            exit(2)
-        if (data1.shape != data2.shape):
-            logger.error('Size: %s != %s', data1.shape, data2.shape)
-            exit(3)
+        if ('TYPE' in compare):
+            logger.info("Check storage TYPES: ")
+            if (data1.dtype != data2.dtype):
+                logger.error('Types: %s vs. %s', data1.dtype, data2.dtype)
+                exit(2)
+            logger.info("[ OK ]")
+        if ('SIZE' in compare):
+            logger.info("Check SIZES: ")
+            if (data1.shape != data2.shape):
+                logger.error('Sizes: %s vs. %s', data1.shape, data2.shape)
+                exit(3)
+            logger.info("[ OK ]")
 
         #Image.fromarray(data1).convert('L').save("array1.png")
         #Image.fromarray(data2).convert('L').save("array2.png")
+        logger.info("Check image difference (subtraction)")
         d  = (data1-data2)
         d_stddev = np.std(d)
         if (d_stddev == 0.0):
             logger.info('Diff.std: 0')
-        elif (d_stddev < 1.0):
+            logger.info("[ OK ]")
+        elif (d_stddev < 1.0):  # TODO: set limit
             logger.info('Diff.std: %d', d_stddev)
         elif (d_stddev < 10.0):
             logger.warn('Diff.std: %d', d_stddev)
@@ -215,7 +224,7 @@ if __name__ == '__main__':
             
         if (options.OUTPUT_FILENAME):
             im = Image.fromarray(d).convert('L')
-        logger.debug("Test ended")
+        #logger.debug("Test ended")
 
     #logger.warn("Test ended")
 
