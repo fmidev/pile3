@@ -3,8 +3,14 @@
 
 # Install environment & dependencies for rack
 
-FROM ubuntu:18.04 
+# FROM ubuntu:18.04
+FROM ubuntu:jammy
 
-#RUN apt-get update && apt-get -y install pip3
-RUN pip3 install tifffile
-RUN pip3 install imagecodecs
+RUN apt-get update && apt-get -y install pip
+
+RUN pip install Pillow tifffile imagecodecs
+
+COPY src/ /pile
+ENV PYTHONPATH=
+
+CMD ["python3","/pile/pile3.py", "--help"]
