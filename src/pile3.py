@@ -194,17 +194,19 @@ if __name__ == '__main__':
         data2 = np.array(Im[1])
         #logger.info(data2)
         if ('TYPE' in compare):
-            logger.info("Check storage TYPES: ")
+            logger.info('Check TYPES: %s vs. %s', data1.dtype, data2.dtype)
             if (data1.dtype != data2.dtype):
-                logger.error('Types: %s vs. %s', data1.dtype, data2.dtype)
+                logger.error('Types differ') 
                 exit(2)
-            logger.info("[ OK ]")
+            else:
+                logger.info("[ OK ]")
         if ('SIZE' in compare):
-            logger.info("Check SIZES: ")
+            logger.info('Check SIZES: %s vs. %s', data1.shape, data2.shape)
             if (data1.shape != data2.shape):
-                logger.error('Sizes: %s vs. %s', data1.shape, data2.shape)
+                logger.error('Sizes differ')
                 exit(3)
-            logger.info("[ OK ]")
+            else:
+                logger.info("[ OK ]")
 
         #Image.fromarray(data1).convert('L').save("array1.png")
         #Image.fromarray(data2).convert('L').save("array2.png")
