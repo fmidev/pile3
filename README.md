@@ -4,6 +4,13 @@ Python utility for simple image operations
 
 * File formats: PNG, TIF, ...
 
+# Usage
+
+```
+pile3.py                     [<imagefile> ...] <commands...>
+python3 $PILE3_DIR/pile3.py  [<imagefile> ...] <commands...>
+python3 -m pile3             [<imagefile> ...] <commands...> 
+```
 
 # Examples
 
@@ -14,6 +21,8 @@ Python utility for simple image operations
 pile3.py image.png --resize 200,400 -o resized.png
 ```
 
+apt-get update && apt-get install -y python3 pip
+pip install numpy tifffile 
 
 Help
 ----

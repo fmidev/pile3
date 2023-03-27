@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 """
 Python image processing based utility.
 Enter 'pile3.py -help' for help.
